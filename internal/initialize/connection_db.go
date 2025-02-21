@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 	"user-service/global"
+	"user-service/internal/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -19,6 +20,11 @@ func InitDb() *gorm.DB {
 	DB, err = connectionDb()
 	if err != nil {
 		log.Fatalf("Could not connect to the database: %v", err)
+	}
+
+	err = performMigration()
+	if err != nil {
+		log.Fatalf("Could not auto migrate: %v", err)
 	}
 	return DB
 }
@@ -53,7 +59,16 @@ func connectionDb() (*gorm.DB, error) {
 	return databaseConnection, nil
 }
 
-// func performMigration() error {
-// 	// err := DB.AutoMigrate()
-// 	return nil
-// }
+func performMigration() error {
+	models := []interface{}{
+		&models.User{},
+	}
+
+	for _, model := range models {
+		if err := DB.AutoMigrate(model); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
