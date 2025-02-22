@@ -4,7 +4,7 @@ env: "development"
 
 mysql:
   host: "localhost"
-  port: 3306
+  port: 8811
   user: "root"
   password: "123456"
   dbName: "user-service"

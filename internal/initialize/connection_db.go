@@ -10,7 +10,6 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var DB *gorm.DB
@@ -40,7 +39,8 @@ func connectionDb() (*gorm.DB, error) {
 	connectionString := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbName)
 
 	databaseConnection, err := gorm.Open(mysql.Open(connectionString), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info), // Enable logging for debugging
+		// Logger: logger.Default.LogMode(logger.Info), // Enable logging for debugging
+		Logger: nil,
 	})
 
 	if err != nil {

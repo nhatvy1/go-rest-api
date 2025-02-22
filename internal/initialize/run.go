@@ -3,9 +3,9 @@ package initialize
 func Run() {
 	LoadConfig()
 
-	InitDb()
+	db := InitDb()
 
-	r := InitRouter()
+	r := InitRouter(db)
 
 	r.Run(":5000")
 }
