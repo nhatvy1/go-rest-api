@@ -1,17 +1,17 @@
 package initialize
 
 import (
-	"user-service/internal/controller"
+	user_module "user-service/internal/module/user"
 
 	"gorm.io/gorm"
 )
 
 type Controllers struct {
-	UserController *controller.UserController
+	UserController *user_module.UserController
 }
 
 func InitAllModule(db *gorm.DB) *Controllers {
 	return &Controllers{
-		UserController: InitUserModule(db),
+		UserController: user_module.InitUserModule(db),
 	}
 }

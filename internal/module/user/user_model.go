@@ -1,6 +1,9 @@
-package models
+package user_module
 
-import "database/sql/driver"
+import (
+	"database/sql/driver"
+	"user-service/pkg/commons"
+)
 
 type Status string
 
@@ -20,7 +23,7 @@ func (s Status) Value() (driver.Value, error) {
 }
 
 type User struct {
-	BaseModel
+	commons.BaseModel
 	FirstName string `json:"first_name" gorm:"column:firstName;not null;" validate:"required,min=1,max=50"`
 	LastName  string `json:"last_name" gorm:"column:lastName;not null;" validate:"required,min=1,max=50"`
 	Email     string `json:"email" gorm:"column:email;not null;unique;" validate:"email,required"`

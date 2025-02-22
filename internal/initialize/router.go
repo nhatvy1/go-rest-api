@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"user-service/internal/routes"
+	user_module "user-service/internal/module/user"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -14,7 +14,7 @@ func InitRouter(db *gorm.DB) *gin.Engine {
 
 	v1 := r.Group("/api/v1")
 	{
-		routes.UserRoutes(v1, controllers.UserController)
+		user_module.UserRoutes(v1, controllers.UserController)
 	}
 
 	return r

@@ -1,13 +1,12 @@
-package routes
+package user_module
 
 import (
 	"net/http"
-	"user-service/internal/controller"
 
 	"github.com/gin-gonic/gin"
 )
 
-func UserRoutes(r *gin.RouterGroup, userController *controller.UserController) {
+func UserRoutes(r *gin.RouterGroup, userController *UserController) {
 	user := r.Group("/users")
 	{
 		user.GET("/", func(c *gin.Context) {
