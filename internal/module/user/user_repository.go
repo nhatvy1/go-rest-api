@@ -1,14 +1,15 @@
 package user_module
 
 import (
+	user_models "user-service/internal/module/user/models"
 	"user-service/pkg/commons"
 
 	"gorm.io/gorm"
 )
 
 type UserRepository interface {
-	FindAll(p commons.PagingUser) ([]User, error)
-	FindById(id uint) (*User, error)
+	FindAll(p commons.PagingUser) ([]user_models.User, error)
+	FindById(id uint) (*user_models.User, error)
 	Save() string
 	Delete() string
 }
@@ -31,8 +32,8 @@ func (u *userRepository) Delete() string {
 	return "delete"
 }
 
-func (u *userRepository) FindAll(p commons.PagingUser) ([]User, error) {
-	var users []User
+func (u *userRepository) FindAll(p commons.PagingUser) ([]user_models.User, error) {
+	var users []user_models.User
 	offset := (p.Page - 1) * p.Limit
 
 	if err := u.db.Order("id desc").
@@ -45,8 +46,8 @@ func (u *userRepository) FindAll(p commons.PagingUser) ([]User, error) {
 	return users, nil
 }
 
-func (u *userRepository) FindById(id uint) (*User, error) {
-	var user User
+func (u *userRepository) FindById(id uint) (*user_models.User, error) {
+	var user user_models.User
 
 	u.db.First(&user)
 	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {

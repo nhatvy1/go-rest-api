@@ -1,4 +1,4 @@
-package user_module
+package user_models
 
 import (
 	"database/sql/driver"

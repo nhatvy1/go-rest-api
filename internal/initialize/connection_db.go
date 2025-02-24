@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 	"user-service/global"
-	user_module "user-service/internal/module/user"
+	user_models "user-service/internal/module/user/models"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -61,7 +61,7 @@ func connectionDb() (*gorm.DB, error) {
 
 func performMigration() error {
 	models := []interface{}{
-		&user_module.User{},
+		&user_models.User{},
 	}
 
 	for _, model := range models {
