@@ -1,6 +1,7 @@
 package user_module
 
 import (
+	"fmt"
 	user_models "user-service/internal/module/user/models"
 	"user-service/pkg/commons"
 
@@ -9,8 +10,9 @@ import (
 
 type UserRepository interface {
 	FindAll(p commons.PagingUser) ([]user_models.User, error)
-	FindById(id uint) (*user_models.User, error)
-	Save() string
+	FindById(id int) (*user_models.User, error)
+	FindByEmail(email string) (*user_models.User, error)
+	Save(data *user_models.UserCreate) (*user_models.User, error)
 	Delete() string
 }
 
@@ -24,19 +26,29 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	}
 }
 
-func (u *userRepository) Save() string {
-	return "save"
+func (userRepo *userRepository) Save(data *user_models.UserCreate) (*user_models.User, error) {
+	user := user_models.User{
+		Email:     data.Email,
+		Password:  data.Password,
+		FirstName: data.FirstName,
+		LastName:  data.LastName,
+	}
+
+	if err := userRepo.db.Create(&user).Error; err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
-func (u *userRepository) Delete() string {
+func (userRepo *userRepository) Delete() string {
 	return "delete"
 }
 
-func (u *userRepository) FindAll(p commons.PagingUser) ([]user_models.User, error) {
+func (userRepo *userRepository) FindAll(p commons.PagingUser) ([]user_models.User, error) {
 	var users []user_models.User
 	offset := (p.Page - 1) * p.Limit
 
-	if err := u.db.Order("id desc").
+	if err := userRepo.db.Order("id desc").
 		Offset(offset).
 		Limit(p.Limit).
 		Find(&users).Error; err != nil {
@@ -46,13 +58,22 @@ func (u *userRepository) FindAll(p commons.PagingUser) ([]user_models.User, erro
 	return users, nil
 }
 
-func (u *userRepository) FindById(id uint) (*user_models.User, error) {
+func (userRepo *userRepository) FindById(id int) (*user_models.User, error) {
 	var user user_models.User
 
-	u.db.First(&user)
-	if err := u.db.Where("id = ?", id).First(&user).Error; err != nil {
+	fmt.Println(id)
+	if err := userRepo.db.Where("id = ?", id).First(&user).Error; err != nil {
 		return nil, err
 	}
 
+	return &user, nil
+}
+
+func (userRepo *userRepository) FindByEmail(email string) (*user_models.User, error) {
+	user := user_models.User{}
+
+	if err := userRepo.db.Where("email = ?", email).First(&user).Error; err != nil {
+		return nil, err
+	}
 	return &user, nil
 }
